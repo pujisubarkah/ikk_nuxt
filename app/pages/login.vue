@@ -1,5 +1,5 @@
 <template>
-  <div class="relative min-h-screen flex flex-col overflow-hidden">
+  <div class="relative flex-grow flex flex-col overflow-hidden">
     <div class="absolute inset-0">
       <template v-if="imagesLoaded">
         <div
@@ -20,7 +20,7 @@
       <div class="absolute inset-0 bg-gradient-to-br from-black/40 via-black/20 to-black/40" />
     </div>
 
-    <Navbar />
+
 
     <main class="flex-grow flex items-center justify-center px-4 py-16 relative z-10">
       <div class="flex flex-col lg:flex-row items-center justify-center gap-8 max-w-6xl w-full">
@@ -146,7 +146,7 @@
       </div>
     </Transition>
 
-    <Footer />
+
   </div>
 </template>
 
@@ -158,8 +158,7 @@ import {
   IconCircleCheck,
   IconCircleX,
 } from '@tabler/icons-vue';
-import Navbar from '@/components/Navbar.vue';
-import Footer from '@/components/Footer.vue';
+
 
 const bannerImages = [
   '/banner/Ilustrasi1.PNG',

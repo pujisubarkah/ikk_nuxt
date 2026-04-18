@@ -1,6 +1,5 @@
 <template>
-  <div class="flex flex-col min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
-    <Navbar />
+  <div class="flex flex-col flex-grow bg-gradient-to-br from-blue-50 to-indigo-100">
 
     <main class="flex-grow px-4 py-8 md:px-6 lg:px-8 flex items-center justify-center">
       <div class="max-w-lg mx-auto bg-white shadow-md rounded-lg p-6 border border-blue-100 w-full">
@@ -213,7 +212,6 @@
       </div>
     </main>
 
-    <Footer />
   </div>
 </template>
 
@@ -221,8 +219,7 @@
 import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { Button, TextField, PasswordInput } from '@idds/vue';
-import Navbar from '@/components/Navbar.vue';
-import Footer from '@/components/Footer.vue';
+
 
 interface FormData {
   nama: string;

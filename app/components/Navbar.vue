@@ -46,7 +46,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import { NuxtLink } from '#components';
+
 import { IconMenu2, IconX } from '@tabler/icons-vue';
 
 const navItems = [

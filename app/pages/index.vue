@@ -1,6 +1,5 @@
 <template>
-  <div class="flex flex-col min-h-screen">
-    <Navbar />
+  <div>
 
     <!-- Hero Section -->
     <main class="text-white px-4 text-center bg-[#16578d] py-20">
@@ -50,13 +49,11 @@
       <FlowSteps />
     </section>
 
-    <Footer />
   </div>
 </template>
 
 <script setup lang="ts">
-import Navbar from '@/components/Navbar.vue';
-import Footer from '@/components/Footer.vue';
+
 import FlowSteps from '@/components/FlowSteps.vue';
 import { Swiper, SwiperSlide } from 'swiper/vue';
 // @ts-ignore
