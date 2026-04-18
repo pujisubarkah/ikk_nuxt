@@ -1,103 +1,108 @@
 <template>
-  <div class="relative flex-grow flex flex-col overflow-hidden">
-    <div class="absolute inset-0">
-      <template v-if="imagesLoaded">
+  <div class="relative min-h-screen flex flex-col overflow-hidden bg-gray-50">
+    <!-- 🌄 Background Slideshow -->
+    <div class="absolute inset-0 overflow-hidden">
+      <div v-if="imagesLoaded" class="absolute inset-0">
         <div
           v-for="(image, index) in bannerImages"
-          :key="image"
-          class="absolute inset-0 transition-all duration-700 ease-in-out"
-          :class="index === currentImageIndex ? 'opacity-100 scale-[1.02]' : 'opacity-0 scale-100'"
+          :key="index"
+          class="absolute inset-0 transition-all duration-1000 ease-in-out"
+          :class="index === currentImageIndex ? 'opacity-100 scale-105' : 'opacity-0 scale-100'"
         >
-          <img
-            :src="image"
-            :alt="`Background ${index + 1}`"
-            class="w-full h-full object-cover"
-            loading="lazy"
-          />
+          <img :src="image" :alt="`Background ${index + 1}`" class="w-full h-full object-cover" />
         </div>
-      </template>
-      <div v-else class="absolute inset-0 bg-gradient-to-br from-[#16578d] via-[#1a5f96] to-[#1e67a3]" />
-      <div class="absolute inset-0 bg-gradient-to-br from-black/40 via-black/20 to-black/40" />
+      </div>
+      <div v-else class="absolute inset-0 bg-gradient-to-br from-[#0f4a7a] via-[#16578d] to-[#1e67a3]" />
+      <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-black/15 to-transparent" />
     </div>
 
-
-
-    <main class="flex-grow flex items-center justify-center px-4 py-16 relative z-10">
-      <div class="flex flex-col lg:flex-row items-center justify-center gap-8 max-w-6xl w-full">
-        <div class="flex-1 max-w-xl text-center lg:text-left">
-          <div class="bg-white/95 backdrop-blur-lg shadow-xl p-6 lg:p-8 rounded-2xl border border-white/20">
-            <div class="mb-4">
-              <span class="inline-block px-3 py-1 bg-[#16578d]/10 text-[#16578d] rounded-full text-xs font-medium mb-3">
-                Lembaga Administrasi Negara RI
-              </span>
-            </div>
-
-            <h1 class="text-2xl lg:text-4xl font-bold mb-3 bg-gradient-to-r from-[#16578d] to-blue-600 bg-clip-text text-transparent">
+    <!-- 📱 Main Content -->
+    <main class="relative z-10 flex-grow flex items-center justify-center px-4 py-8 sm:py-12">
+      <div class="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+        
+        <!-- ℹ️ Info Card -->
+        <div class="text-center lg:text-left space-y-6">
+          <div class="bg-white/80 backdrop-blur-xl shadow-2xl p-6 sm:p-8 rounded-2xl border border-white/30">
+            <span class="inline-flex items-center gap-2 px-4 py-1.5 bg-[#16578d]/10 text-[#16578d] rounded-full text-xs font-semibold tracking-wide uppercase mb-4">
+              <IconShield class="w-4 h-4" />
+              Lembaga Administrasi Negara RI
+            </span>
+            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 leading-tight">
               Sistem Informasi
+              <span class="block bg-gradient-to-r from-[#16578d] to-blue-500 bg-clip-text text-transparent mt-1">
+                Pengukuran Kualitas Kebijakan
+              </span>
             </h1>
-            <h2 class="text-xl lg:text-2xl font-semibold text-gray-700 mb-4">
-              Pengukuran Kualitas Kebijakan
-            </h2>
-
-            <div class="space-y-3 text-gray-600">
-              <p class="text-sm lg:text-base leading-relaxed">
-                Instrumen untuk mengukur kualitas kebijakan pemerintah terhadap
-                <span class="text-[#16578d] font-semibold">
-                  dampak dan hasil bagi pembangunan yang strategis
-                </span>
-                dengan mengedepankan prinsip berbasis bukti
-                <em class="text-[#16578d]">(evidence-based)</em>.
-              </p>
-
-              <div class="flex flex-wrap gap-2 justify-center lg:justify-start mt-4">
-                <div class="flex items-center gap-1 bg-blue-50 px-3 py-1 rounded-full">
-                  <IconCircleCheck class="w-4 h-4 text-green-500" />
-                  <span class="text-xs font-medium">Evidence-based</span>
-                </div>
-                <div class="flex items-center gap-1 bg-green-50 px-3 py-1 rounded-full">
-                  <IconCircleCheck class="w-4 h-4 text-green-500" />
-                  <span class="text-xs font-medium">Self Assessment</span>
-                </div>
-                <div class="flex items-center gap-1 bg-cyan-50 px-3 py-1 rounded-full">
-                  <IconCircleCheck class="w-4 h-4 text-green-500" />
-                  <span class="text-xs font-medium">Reformasi Birokrasi</span>
-                </div>
-              </div>
+            <p class="mt-4 text-gray-600 text-sm sm:text-base leading-relaxed">
+              Instrumen resmi untuk mengukur kualitas kebijakan pemerintah terhadap
+              <span class="font-semibold text-[#16578d]">dampak & hasil pembangunan strategis</span>,
+              mengedepankan pendekatan berbasis bukti <em class="not-italic font-medium text-[#16578d]">(evidence-based)</em>.
+            </p>
+            <div class="flex flex-wrap gap-3 mt-6 justify-center lg:justify-start">
+              <FeatureBadge text="Evidence-based" color="blue" />
+              <FeatureBadge text="Self Assessment" color="green" />
+              <FeatureBadge text="Reformasi Birokrasi" color="cyan" />
             </div>
           </div>
         </div>
 
-        <div class="flex-1 max-w-lg w-full">
-          <div class="bg-white/95 backdrop-blur-lg shadow-xl p-6 rounded-2xl border border-white/20">
-            <form class="space-y-4 lg:space-y-6 max-w-lg mx-auto" @submit="handleSubmit">
-              <div class="flex flex-col items-start gap-2">
-                <img :src="illustrasiImage" class="max-w-sm w-full mb-2 self-center" alt="Login Illustration" />
-                <div class="space-y-2">
-                  <h1 class="text-xl font-bold">Login</h1>
-                  <p class="text-sm">Disini kamu bisa login ke akun kamu</p>
-                </div>
+        <!-- 🔐 Login Card -->
+        <div class="w-full max-w-md mx-auto lg:mx-0">
+          <div class="bg-white/90 backdrop-blur-xl shadow-2xl p-6 sm:p-8 rounded-2xl border border-white/40">
+            <div class="text-center mb-6">
+              <img :src="illustrasiImage" class="h-24 mx-auto mb-4 object-contain drop-shadow-lg animate-float" alt="Login Illustration" />
+              <h2 class="text-2xl font-bold text-gray-800">Selamat Datang</h2>
+              <p class="text-gray-500 text-sm mt-1">Silakan masuk untuk mengakses sistem</p>
+            </div>
+
+            <form class="space-y-5" @submit="handleSubmit">
+              <!-- Username -->
+              <div class="group relative flex items-center rounded-xl border border-gray-200 bg-white/60 px-3 py-2 focus-within:border-[#16578d] focus-within:ring-2 focus-within:ring-[#16578d]/20 transition-all duration-200">
+                <IconUser class="w-5 h-5 text-gray-400 group-focus-within:text-[#16578d] transition-colors mr-2" />
+                <TextField 
+                  label="Username" 
+                  v-model="emailValue" 
+                  placeholder="Masukkan username" 
+                  class="flex-1 border-0 shadow-none bg-transparent focus:ring-0 text-sm" 
+                />
               </div>
 
-              <div class="flex flex-col gap-2 md:gap-4 w-full">
-                <TextField label="Email" v-model="emailValue" placeholder="Enter text..." />
-                <div class="flex flex-col gap-2 w-full">
-                  <PasswordInput label="Password" v-model="password" placeholder="Enter text..." />
-                  <Button hierarchy="link" class="self-start text-xs">Forgot Password</Button>
-                </div>
+              <!-- Password -->
+              <div class="group relative flex items-center rounded-xl border border-gray-200 bg-white/60 px-3 py-2 focus-within:border-[#16578d] focus-within:ring-2 focus-within:ring-[#16578d]/20 transition-all duration-200">
+                <IconLock class="w-5 h-5 text-gray-400 group-focus-within:text-[#16578d] transition-colors mr-2" />
+                <PasswordInput 
+                  label="Password" 
+                  v-model="password" 
+                  placeholder="Masukkan password" 
+                  class="flex-1 border-0 shadow-none bg-transparent focus:ring-0 text-sm" 
+                />
               </div>
 
-              <div class="flex flex-col gap-3 md:gap-4 w-full">
-                <Button hierarchy="primary" type="submit" :disabled="isLoading">
+              <div class="flex items-center justify-between text-sm">
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" class="w-4 h-4 rounded border-gray-300 text-[#16578d] focus:ring-[#16578d] transition" />
+                  <span class="text-gray-600">Ingat saya</span>
+                </label>
+                <Button hierarchy="link" class="text-[#16578d] hover:text-blue-600 font-medium text-sm transition-colors">Lupa Password?</Button>
+              </div>
+
+              <Button 
+                hierarchy="primary" 
+                type="submit" 
+                :disabled="isLoading" 
+                class="w-full py-3 text-base font-semibold rounded-xl shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed"
+              >
+                <span class="inline-flex items-center gap-2">
+                  <IconLogin2 v-if="!isLoading" class="w-5 h-5" />
                   {{ isLoading ? 'Memproses...' : 'Masuk' }}
-                </Button>
-                <p class="text-xs self-center">Atau</p>
-                <p class="text-center text-xs text-gray-600">
-                  Koordinator Instansi baru?
-                  <NuxtLink
-                    to="/register"
-                    class="text-[#16578d] font-semibold hover:text-blue-600 transition-colors duration-300 inline-flex items-center gap-1"
-                  >
-                    Daftar di sini
+                </span>
+              </Button>
+
+              <div class="text-center pt-2 border-t border-gray-100 mt-4">
+                <p class="text-gray-500 text-sm">
+                  Belum memiliki akun?
+                  <NuxtLink to="/register" class="text-[#16578d] font-semibold hover:text-blue-600 transition-colors ml-1">
+                    Daftar Sekarang
                   </NuxtLink>
                 </p>
               </div>
@@ -107,37 +112,33 @@
       </div>
     </main>
 
-    <Transition name="fade">
-      <div
-        v-if="showSuccessModal"
-        class="fixed inset-0 flex items-center justify-center bg-black/60 backdrop-blur-sm z-50"
-      >
-        <div class="bg-white p-6 rounded-xl shadow-2xl text-center max-w-sm mx-4 animate-pop">
-          <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
-            <IconCircleCheck class="w-6 h-6 text-green-500" />
+    <!-- ✅ Success Modal -->
+    <Transition name="modal">
+      <div v-if="showSuccessModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4" @click.self="showSuccessModal = false">
+        <div class="bg-white p-6 rounded-2xl shadow-2xl text-center max-w-sm w-full animate-pop">
+          <div class="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <IconCircleCheck class="w-7 h-7 text-green-500" />
           </div>
-          <h2 class="text-xl font-bold text-green-600 mb-2">Login Berhasil!</h2>
-          <p class="text-gray-600 mb-3 text-sm">Selamat datang kembali! Anda akan diarahkan ke Dashboard...</p>
+          <h2 class="text-xl font-bold text-gray-800 mb-2">Login Berhasil!</h2>
+          <p class="text-gray-500 mb-4 text-sm">Selamat datang kembali! Anda akan diarahkan ke Dashboard...</p>
           <div class="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
-            <div class="bg-green-500 h-2 rounded-full animate-progress" />
+            <div class="bg-gradient-to-r from-green-400 to-green-600 h-2 rounded-full animate-progress" />
           </div>
         </div>
       </div>
     </Transition>
 
-    <Transition name="fade">
-      <div
-        v-if="showErrorModal"
-        class="fixed inset-0 flex items-center justify-center bg-black/60 backdrop-blur-sm z-50"
-      >
-        <div class="bg-white p-6 rounded-xl shadow-2xl text-center max-w-sm mx-4 animate-pop">
-          <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-3">
-            <IconCircleX class="w-6 h-6 text-red-500" />
+    <!-- ❌ Error Modal -->
+    <Transition name="modal">
+      <div v-if="showErrorModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4" @click.self="showErrorModal = false">
+        <div class="bg-white p-6 rounded-2xl shadow-2xl text-center max-w-sm w-full animate-pop">
+          <div class="w-14 h-14 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <IconCircleX class="w-7 h-7 text-red-500" />
           </div>
-          <h2 class="text-xl font-bold text-red-600 mb-2">Login Gagal!</h2>
-          <p class="text-gray-600 mb-4 text-sm">{{ error }}</p>
+          <h2 class="text-xl font-bold text-gray-800 mb-2">Login Gagal!</h2>
+          <p class="text-gray-500 mb-5 text-sm">{{ error }}</p>
           <button
-            class="w-full py-3 bg-gradient-to-r from-[#16578d] to-blue-600 text-white font-semibold rounded-lg hover:from-[#12466f] hover:to-blue-700 transition-all duration-300"
+            class="w-full py-2.5 bg-gradient-to-r from-[#16578d] to-blue-600 text-white font-semibold rounded-xl hover:from-[#12466f] hover:to-blue-700 transition-all duration-300 shadow-md hover:shadow-lg"
             @click="showErrorModal = false"
           >
             Coba Lagi
@@ -145,8 +146,6 @@
         </div>
       </div>
     </Transition>
-
-
   </div>
 </template>
 
@@ -154,11 +153,27 @@
 import { onBeforeUnmount, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { Button, TextField, PasswordInput } from '@idds/vue';
+import { useAuthStore } from '~/store/auth';
 import {
   IconCircleCheck,
   IconCircleX,
+  IconUser,
+  IconLock,
+  IconShield,
+  IconLogin2,
 } from '@tabler/icons-vue';
 
+// Inline Badge Component
+const FeatureBadge = defineComponent({
+  props: { text: String, color: String },
+  setup(props) {
+    const colorMap = { blue: 'bg-blue-50 text-blue-700', green: 'bg-green-50 text-green-700', cyan: 'bg-cyan-50 text-cyan-700' };
+    return () => h('div', { class: `flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium ${colorMap[props.color as keyof typeof colorMap] || 'bg-gray-50'}` }, [
+      h(IconCircleCheck, { class: 'w-3.5 h-3.5' }),
+      h('span', props.text)
+    ]);
+  }
+});
 
 const bannerImages = [
   '/banner/Ilustrasi1.PNG',
@@ -180,25 +195,18 @@ const illustrasiImage = '/lanri_.png';
 const router = useRouter();
 
 function toRoleSlug(role: string) {
-  return role
-    .toLowerCase()
-    .trim()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '');
+  return role.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
 }
 
 let intervalId: ReturnType<typeof setInterval> | null = null;
 
 onMounted(async () => {
-  const imagePromises = bannerImages.map(
-    (src) =>
-      new Promise<void>((resolve) => {
-        const img = new window.Image();
-        img.onload = () => resolve();
-        img.onerror = () => resolve();
-        img.src = src;
-      })
-  );
+  const imagePromises = bannerImages.map(src => new Promise<void>(resolve => {
+    const img = new window.Image();
+    img.onload = () => resolve();
+    img.onerror = () => resolve();
+    img.src = src;
+  }));
 
   await Promise.all(imagePromises);
   imagesLoaded.value = true;
@@ -209,11 +217,10 @@ onMounted(async () => {
 });
 
 onBeforeUnmount(() => {
-  if (intervalId) {
-    clearInterval(intervalId);
-    intervalId = null;
-  }
+  if (intervalId) clearInterval(intervalId);
 });
+
+const authStore = useAuthStore();
 
 async function handleSubmit(e: Event) {
   e.preventDefault();
@@ -227,22 +234,11 @@ async function handleSubmit(e: Event) {
     const response = await $fetch<{
       success: boolean;
       error?: string;
-      data?: {
-        id: number;
-        role_id: number;
-        username: string;
-        name: string;
-        role: string;
-      };
-    }>('/api/login', {
+      data?: { id: number; role_id: number; username: string; name: string; role: string; };
+    }>('/api/auth/login', {
       method: 'POST',
-      headers: {
-        Authorization: `Bearer ${authToken}`,
-      },
-      body: {
-        username: emailValue.value,
-        password: password.value,
-      },
+      headers: { Authorization: `Bearer ${authToken}` },
+      body: { username: emailValue.value, password: password.value },
     });
 
     if (!response.success || !response.data) {
@@ -251,25 +247,21 @@ async function handleSubmit(e: Event) {
       return;
     }
 
-    const responseData = response.data;
-
-    if (import.meta.client) {
-      localStorage.setItem('id', String(responseData.id));
-      localStorage.setItem('role_id', String(responseData.role_id));
-      localStorage.setItem('username', responseData.username);
-      localStorage.setItem('name', responseData.name);
-      localStorage.setItem('role', responseData.role);
-    }
+    const { id, role_id, username, name, role } = response.data;
+    authStore.setAuth({
+      id: String(id),
+      role_id: String(role_id),
+      username,
+      name,
+      role,
+    });
 
     showSuccessModal.value = true;
-    showErrorModal.value = false;
-
     setTimeout(() => {
-      router.push(`/${toRoleSlug(responseData.role) || 'dashboard'}`);
+      router.push(`/${toRoleSlug(role) || 'dashboard'}`);
     }, 2000);
   } catch (err: unknown) {
-    const message = err instanceof Error ? err.message : 'An unexpected error occurred';
-    error.value = message;
+    error.value = err instanceof Error ? err.message : 'Terjadi kesalahan tak terduga';
     showErrorModal.value = true;
   } finally {
     isLoading.value = false;
@@ -278,41 +270,26 @@ async function handleSubmit(e: Event) {
 </script>
 
 <style scoped>
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.25s ease;
-}
+/* Modal Transitions */
+.modal-enter-active, .modal-leave-active { transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+.modal-enter-from, .modal-leave-to { opacity: 0; transform: scale(0.95); }
 
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
-
+/* Animations */
 @keyframes pop {
-  0% {
-    transform: scale(0.92);
-    opacity: 0;
-  }
-  100% {
-    transform: scale(1);
-    opacity: 1;
-  }
+  0% { transform: scale(0.92); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
 }
-
-.animate-pop {
-  animation: pop 0.25s ease;
-}
+.animate-pop { animation: pop 0.35s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
 
 @keyframes progress {
-  0% {
-    width: 0%;
-  }
-  100% {
-    width: 100%;
-  }
+  0% { width: 0%; }
+  100% { width: 100%; }
 }
+.animate-progress { animation: progress 2s linear forwards; }
 
-.animate-progress {
-  animation: progress 2s linear forwards;
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
 }
+.animate-float { animation: float 4s ease-in-out infinite; }
 </style>

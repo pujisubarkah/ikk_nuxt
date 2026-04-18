@@ -1,32 +1,36 @@
 <template>
-  <div class="p-5 flex flex-col gap-6">
-    <div class="flex gap-6">
-      <TabVertical
-        :items="items"
-        :value="value"
-        @change="setValue"
-        variant="button-brand"
-        width="180px"
-      />
-      <div class="flex-1 p-4">
-        <p>Selected: {{ value }}</p>
-      </div>
-    </div>
+  <div class="flex space-x-2 md:space-x-4 overflow-x-auto">
+    <button
+      v-for="item in items"
+      :key="item.value"
+      class="px-4 py-2 text-sm md:text-base rounded-t-lg font-semibold whitespace-nowrap transition-colors"
+      :class="item.value === value ? 'bg-white text-blue-600 border-b-2 border-blue-600' : 'text-gray-600 bg-gray-200 hover:bg-gray-300'"
+      @click="setValue(item.value)"
+    >
+      {{ item.label }}
+    </button>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import { TabVertical } from '@idds/vue';
+export interface UiTabMenuItem {
+  value: string;
+  label: string;
+}
 
-const value = ref('overview');
-const items = ref([
-  { value: 'overview', label: 'Overview' },
-  { value: 'details', label: 'Details' },
-  { value: 'profile', label: 'Profile' },
-]);
+const props = defineProps<{
+  items: UiTabMenuItem[];
+  value: string;
+}>();
 
-const setValue = (newValue: string) => {
-  value.value = newValue;
-};
+const emit = defineEmits<{
+  (e: 'change', value: string): void;
+  (e: 'update:value', value: string): void;
+}>();
+
+function setValue(newValue: string) {
+  if (newValue === props.value) return;
+  emit('update:value', newValue);
+  emit('change', newValue);
+}
 </script>

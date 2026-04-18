@@ -42,41 +42,53 @@
       </div>
     </div>
 
-    <l-map
-      :zoom="zoom"
-      :center="center"
-      style="height: 600px; width: 100%"
-      :useGlobalLeaflet="false"
-    >
-      <l-tile-layer
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        attribution="&copy; OpenStreetMap contributors"
-      />
-      <l-geo-json
-        v-if="geoData"
-        :geojson="filteredData"
-        :options-style="styleFeature"
-        :options-on-each-feature="onEachFeature"
-      />
-      <LegendControl v-if="filter !== 'kementerian'" />
-      <template v-if="filter === 'kementerian' && apiData">
-        <l-marker
-          v-for="(item, idx) in apiData.data.filter(i => i[`predikat_${selectedYear}`])"
-          :key="`lembaga-${idx}`"
-          :lat-lng="getKementerianLatLng(item)"
-        >
-          <l-popup>
-            <strong>{{ item.instansi_nama }}</strong>
-          </l-popup>
-        </l-marker>
-      </template>
-    </l-map>
+    <div class="relative">
+      <l-map
+        :zoom="zoom"
+        :center="center"
+        style="height: 600px; width: 100%"
+        :useGlobalLeaflet="false"
+      >
+        <l-tile-layer
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          attribution="&copy; OpenStreetMap contributors"
+        />
+        <l-geo-json
+          v-if="geoData"
+          :geojson="filteredData"
+          :options-style="styleFeature"
+          :options-on-each-feature="onEachFeature"
+        />
+        <template v-if="filter === 'kementerian' && apiData">
+          <l-marker
+            v-for="(item, idx) in apiData.data.filter((i) => i[`predikat_${selectedYear}`])"
+            :key="`lembaga-${idx}`"
+            :lat-lng="getKementerianLatLng(item)"
+          >
+            <l-popup>
+              <strong>{{ item.instansi_nama }}</strong>
+            </l-popup>
+          </l-marker>
+        </template>
+      </l-map>
+
+      <div
+        v-if="filter !== 'kementerian'"
+        class="absolute bottom-4 right-4 z-[500] rounded-lg bg-white p-3 text-sm leading-relaxed shadow-md"
+      >
+        <strong>Legenda</strong><br>
+        <span class="inline-block w-4 h-4 rounded-sm bg-[#3182ce] mr-2 align-middle" />
+        Wilayah dengan Penilaian IKK<br>
+        <span class="inline-block w-4 h-4 rounded-sm bg-white border border-gray-300 mr-2 align-middle" />
+        Wilayah belum melakukan Penilaian IKK
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue';
-import { LMap, LTileLayer, LGeoJson, LMarker, LPopup, useMap } from 'vue-leaflet';
+import { LMap, LTileLayer, LGeoJson, LMarker, LPopup } from '@vue-leaflet/vue-leaflet';
 import 'leaflet/dist/leaflet.css';
 
 const mapSources = {
@@ -106,26 +118,44 @@ const apiData = ref<ApiData | null>(null);
 
 const fetcher = async (url: string) => {
   const res = await fetch(url);
+  if (!res.ok) {
+    throw new Error(`Request failed (${res.status}) for ${url}`);
+  }
   return await res.json();
 };
 
-watch(filter, async () => {
-  geoData.value = await fetcher(mapSources[filter.value]);
-});
+const loadGeoData = async () => {
+  try {
+    geoData.value = await fetcher(mapSources[filter.value]);
+  } catch (error) {
+    console.error('Failed to load geo data:', error);
+    geoData.value = { type: 'FeatureCollection', features: [] };
+  }
+};
 
-watch([filter, selectedYear], async () => {
+const loadApiData = async () => {
   const apiEndpoint =
     filter.value === 'provinsi'
       ? `/api/ikk-hasil/provinsi/${selectedYear.value}`
       : filter.value === 'kabupaten'
       ? `/api/ikk-hasil/kabkot/${selectedYear.value}`
       : `/api/ikk-hasil/lembaga/${selectedYear.value}`;
-  apiData.value = await fetcher(apiEndpoint);
-});
 
-// Initial fetch
-geoData.value = await fetcher(mapSources[filter.value]);
-apiData.value = await fetcher(`/api/ikk-hasil/provinsi/${selectedYear.value}`);
+  try {
+    apiData.value = await fetcher(apiEndpoint);
+  } catch (error) {
+    console.error('Failed to load API data:', error);
+    apiData.value = { data: [] };
+  }
+};
+
+watch(filter, async () => {
+  await loadGeoData();
+}, { immediate: true });
+
+watch([filter, selectedYear], async () => {
+  await loadApiData();
+}, { immediate: true });
 
 const filterLabel = computed(() =>
   filter.value === 'kementerian'
@@ -218,41 +248,4 @@ function getKementerianLatLng(item: any) {
   if (!koor || !koor.Latitude || !koor.Longitude) return [0, 0];
   return [koor.Latitude, koor.Longitude];
 }
-</script>
-
-<script lang="ts">
-import { defineComponent, onMounted } from 'vue';
-import * as L from 'leaflet';
-
-export default defineComponent({
-  name: 'LegendControl',
-  setup() {
-    onMounted(() => {
-      const map = (window as any).LMapInstance;
-      if (!map) return;
-      const legend = new L.Control({ position: 'bottomright' });
-      legend.onAdd = () => {
-        const div = L.DomUtil.create('div', 'info legend');
-        div.innerHTML = `
-          <div style="
-            background: white;
-            padding: 10px;
-            border-radius: 8px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-            font-size: 14px;
-            line-height: 1.6;
-          ">
-            <strong>Legenda</strong><br/>
-            <i style="background: #3182ce; width: 18px; height: 18px; display: inline-block; margin-right: 8px; border-radius: 4px;"></i>
-            Wilayah dengan Penilaian IKK<br/>
-            <i style="background: #fff; border: 1px solid #ccc; width: 18px; height: 18px; display: inline-block; margin-right: 8px; border-radius: 4px;"></i>
-            Wilayah belum melakukan Penilaian IKK
-          </div>
-        `;
-        return div;
-      };
-      legend.addTo(map);
-    });
-  },
-});
 </script>

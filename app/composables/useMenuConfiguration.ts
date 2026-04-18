@@ -1,8 +1,10 @@
 import {
-  IconBuilding,
-  IconCategory2,
-  IconDatabase,
-  IconReceipt,
+  IconHome,
+  IconLayoutDashboard,
+  IconFileText,
+  IconChartBar,
+  IconNetwork,
+  IconUsers,
   IconUser,
 } from '@tabler/icons-vue';
 
@@ -15,54 +17,85 @@ export interface SidebarMenuItem {
 
 export interface SidebarMenuGroup {
   key: string;
+  groupLabel: string;
   items: SidebarMenuItem[];
 }
 
 export function useMenuConfiguration() {
-  const menuGroups: SidebarMenuGroup[] = [
+  const route = useRoute()
+  const slug = computed(() => route.params.slug as string)
+
+  // Role 1 - Admin Nasional
+  const menuGroupsRole1 = computed<SidebarMenuGroup[]>(() => [
     {
-      key: 'main',
+      key: 'home',
+      groupLabel: '',
       items: [
         {
-          key: 'overview',
-          label: 'Dashboard',
-          icon: IconCategory2,
+          key: 'home',
+          label: 'Home',
+          icon: IconHome,
           to: '/dashboard',
         },
+      ],
+    },
+    {
+      key: 'main',
+      groupLabel: 'Menu Utama',
+      items: [
         {
-          key: 'usage',
-          label: 'Penggunaan',
-          icon: IconDatabase,
-          to: '/dashboard/penggunaan',
+          key: 'dashboard',
+          label: 'Dashboard',
+          icon: IconLayoutDashboard,
+          to: `/${slug.value}/dashboard`,
         },
         {
-          key: 'receipt',
-          label: 'Receipt',
-          icon: IconReceipt,
-          to: '/dashboard/receipt',
+          key: 'kebijakan',
+          label: 'Kebijakan',
+          icon: IconFileText,
+          to: `/${slug.value}/kebijakan`,
+        },
+        {
+          key: 'ringkasan',
+          label: 'Ringkasan',
+          icon: IconFileText,
+          to: `/${slug.value}/ringkasan`,
+        },
+        {
+          key: 'chart',
+          label: 'Chart',
+          icon: IconChartBar,
+          to: `/${slug.value}/chart`,
+        },
+        {
+          key: 'peta-kinerja',
+          label: 'Peta Kinerja',
+          icon: IconNetwork,
+          to: `/${slug.value}/peta-kinerja`,
         },
       ],
     },
     {
-      key: 'management',
+      key: 'master-data',
+      groupLabel: 'Master Data',
       items: [
         {
-          key: 'user',
-          label: 'User Management',
-          icon: IconUser,
-          to: '/dashboard/users',
+          key: 'instansi',
+          label: 'Instansi',
+          icon: IconUsers,
+          to: '/instansi',
         },
         {
-          key: 'company',
-          label: 'Company',
-          icon: IconBuilding,
-          to: '/dashboard/company',
+          key: 'pengguna',
+          label: 'Pengguna',
+          icon: IconUser,
+          to: '/pengguna',
         },
       ],
     },
-  ];
+  ]);
 
   return {
-    menuGroups,
+    menuGroupsRole1,
   };
 }
