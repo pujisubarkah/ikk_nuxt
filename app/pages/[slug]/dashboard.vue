@@ -25,8 +25,8 @@
 					<div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500" />
 				</div>
 
-				<UiTable v-else :headers="approvalHeaders" :items="filteredUsers">
-					<template #no="{ index }">{{ index + 1 }}</template>
+				<UiTable v-else :headers="approvalHeaders" :items="paginatedApprovalUsers">
+					<template #no="{ index }">{{ (approvalPage - 1) * approvalPerPage + index + 1 }}</template>
 					<template #nama="{ item }">{{ asUser(item).name }}</template>
 					<template #instansi="{ item }">{{ asUser(item).instansi?.agency_name || 'Tidak Ada' }}</template>
 					<template #email="{ item }">
@@ -78,6 +78,13 @@
 						<span class="text-gray-500">Tidak ada data koordinator instansi yang perlu disetujui</span>
 					</template>
 				</UiTable>
+				<UiPagination
+					:total="filteredUsers.length"
+					:page="approvalPage"
+					:per-page="approvalPerPage"
+					class="mt-4"
+					@update:page="approvalPage = $event"
+				/>
 			</div>
 
 			<div v-if="activeTab === 'penentuan_kornas'">
@@ -95,8 +102,8 @@
 					<div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500" />
 				</div>
 
-				<UiTable v-else :headers="kornasHeaders" :items="kornasList">
-					<template #no="{ index }">{{ index + 1 }}</template>
+				<UiTable v-else :headers="kornasHeaders" :items="paginatedKornasList">
+					<template #no="{ index }">{{ (kornasPage - 1) * kornasPerPage + index + 1 }}</template>
 					<template #nama="{ item }">{{ asKoornasEntry(item).name }}</template>
 					<template #instansi="{ item }">{{ asKoornasEntry(item).instansi }}</template>
 					<template #pilih="{ item }">
@@ -124,6 +131,13 @@
 						<span class="text-gray-500">Tidak ada koordinator instansi yang tersedia.</span>
 					</template>
 				</UiTable>
+				<UiPagination
+					:total="kornasList.length"
+					:page="kornasPage"
+					:per-page="kornasPerPage"
+					class="mt-4"
+					@update:page="kornasPage = $event"
+				/>
 			</div>
 
 			<div v-if="activeTab === 'penentuan_verif'">
@@ -141,8 +155,8 @@
 					<div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500" />
 				</div>
 
-				<UiTable v-else :headers="verifHeaders" :items="kornasOptions">
-					<template #no="{ index }">{{ index + 1 }}</template>
+				<UiTable v-else :headers="verifHeaders" :items="paginatedKornasOptions">
+					<template #no="{ index }">{{ (verifPage - 1) * verifPerPage + index + 1 }}</template>
 					<template #nama="{ item }">{{ asKoornasOption(item).label }}</template>
 					<template #verif1="{ item }">
 						<select
@@ -209,6 +223,13 @@
 						<span class="text-gray-500">Tidak ada koordinator nasional yang tersedia.</span>
 					</template>
 				</UiTable>
+				<UiPagination
+					:total="kornasOptions.length"
+					:page="verifPage"
+					:per-page="verifPerPage"
+					class="mt-4"
+					@update:page="verifPage = $event"
+				/>
 			</div>
 
 			<div v-if="activeTab === 'helpdesk'">
@@ -222,8 +243,8 @@
 					<div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500" />
 				</div>
 
-				<UiTable v-else :headers="helpdeskHeaders" :items="sortedHelpdesk">
-					<template #no="{ index }">{{ index + 1 }}</template>
+				<UiTable v-else :headers="helpdeskHeaders" :items="paginatedHelpdesk">
+					<template #no="{ index }">{{ (helpdeskPage - 1) * helpdeskPerPage + index + 1 }}</template>
 					<template #tanggal="{ item }">{{ formatDate(asHelpdeskTicket(item).created_at) }}</template>
 					<template #nama_lengkap="{ item }">{{ asHelpdeskTicket(item).nama_lengkap }}</template>
 					<template #email_aktif="{ item }">{{ asHelpdeskTicket(item).email_aktif }}</template>
@@ -236,12 +257,49 @@
 						<span class="text-gray-500">Tidak ada data helpdesk yang tersedia</span>
 					</template>
 				</UiTable>
+				<UiPagination
+					:total="sortedHelpdesk.length"
+					:page="helpdeskPage"
+					:per-page="helpdeskPerPage"
+					class="mt-4"
+					@update:page="helpdeskPage = $event"
+				/>
 			</div>
 		</div>
 	</div>
 </template>
 
 <script setup lang="ts">
+import UiPagination from '@/components/UI/UiPagination.vue';
+// Pagination states
+const approvalPage = ref(1);
+const approvalPerPage = 10;
+const kornasPage = ref(1);
+const kornasPerPage = 10;
+const verifPage = ref(1);
+const verifPerPage = 10;
+const helpdeskPage = ref(1);
+const helpdeskPerPage = 10;
+
+const paginatedApprovalUsers = computed(() => {
+	const start = (approvalPage.value - 1) * approvalPerPage;
+	return filteredUsers.value.slice(start, start + approvalPerPage);
+});
+
+const paginatedKornasList = computed(() => {
+	const start = (kornasPage.value - 1) * kornasPerPage;
+	return kornasList.value.slice(start, start + kornasPerPage);
+});
+
+const paginatedKornasOptions = computed(() => {
+	const start = (verifPage.value - 1) * verifPerPage;
+	return kornasOptions.value.slice(start, start + verifPerPage);
+});
+
+const paginatedHelpdesk = computed(() => {
+	const start = (helpdeskPage.value - 1) * helpdeskPerPage;
+	return sortedHelpdesk.value.slice(start, start + helpdeskPerPage);
+});
 import { computed, onMounted, ref } from 'vue';
 import UiTabMenu from '@/components/UI/UiTabMenu.vue';
 import UiTable from '@/components/UI/UiTable.vue';

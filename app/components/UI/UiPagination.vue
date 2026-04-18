@@ -1,31 +1,27 @@
 <template>
-  <div style="padding: 20px">
+  <div>
     <Pagination
-      v-model="currentPage"
+      :model-value="page"
       :total-pages="totalPages"
-      :page-size="pageSize"
+      :page-size="perPage"
       :page-size-options="pageSizeOptions"
-      @update:model-value="handlePageChange"
-      @page-size-change="handlePageSizeChange"
+      @update:model-value="onPageChange"
     />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { computed } from 'vue';
 import { Pagination } from '@idds/vue';
-
-const currentPage = ref(1);
-const pageSize = ref(10);
-const totalPages = 10;
+const props = defineProps({
+  page: { type: Number, required: true },
+  perPage: { type: Number, required: true },
+  total: { type: Number, required: true },
+});
+const emit = defineEmits(['update:page']);
 const pageSizeOptions = [10, 20, 50, 100];
-
-const handlePageChange = (page: number) => {
-  currentPage.value = page;
-};
-
-const handlePageSizeChange = (newPageSize: number) => {
-  pageSize.value = newPageSize;
-  currentPage.value = 1;
-};
+const totalPages = computed(() => Math.max(1, Math.ceil(props.total / props.perPage)));
+function onPageChange(newPage: number) {
+  emit('update:page', newPage);
+}
 </script>
