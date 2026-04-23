@@ -6,7 +6,8 @@ import {
   varchar,
 } from 'drizzle-orm/pg-core';
 import { ikkNew } from './_shared';
-import { activeYear, instansi } from './core';
+import { activeYear } from './core';
+import { instansi } from './instansi/instansi';
 
 export const agencies = ikkNew.table('agencies', {
   id: bigserial('id', { mode: 'number' }).primaryKey(),

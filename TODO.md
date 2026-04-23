@@ -1,42 +1,32 @@
-# TODO: Create Drizzle Schema APIs
+# TODO: Convert server/api/instansi/ to Nuxt/Nitro (from Next.js/Prisma)
 
-## Approved Plan Summary
-- Create REST APIs for all schema tables using Nuxt Nitro patterns
-- Structure: server/api/[group]/[table]/ (GET/POST/[id].*)
-- Groups: auth, core, users, organizations, policies, ikk, misc
-- CRUD operations with pagination, basic validation, standard responses {success, data/error}
-- Reference external repo pattern: https://github.com/pujisubarkah/sik-keuangan/tree/main/server/api (follow similar structure/import utils if possible)
-- Phase 1 priority: user, agencies, policy, instansi, role, ikkKiScore, ikkKuScore
-- Later: auth middleware, full tables, frontend integration
+## Plan Steps (Approved by User)
 
-## Steps (0/15 complete)
+### 1. ✅ Create this TODO.md for tracking
 
-### Phase 1: Core Infrastructure
-- [ ] 1. Create utils/db.ts with common CRUD helpers (getAll, getById, create, update, delete)
-- [ ] 2. Create middleware/auth.ts (optional basic check from event.context.session)
-- [ ] 3. Create server/api/test/ping.get.ts to verify DB connection
+### 2. Convert core files one-by-one (update this file after each)
 
-### Phase 2: Priority Tables APIs
-- [x] 4. Group 'users': server/api/users/ (all 5 CRUD ✅ Test: /api/users )
-- [x] 5. server/api/core/instansi/ (CRUD ✅ Test: /api/core ) 
+- [✅] server/api/instansi/index.ts (POST/GET agencies -> Drizzle)
+- [✅] server/api/instansi/panrb/index.ts (GET instansi)
+- [✅] server/api/instansi/policy/index.ts (GET instansi + policy)
+- [✅] server/api/instansi/[id]/instansi.ts (GET agency_name)
+- [✅] server/api/instansi/[id]/agency.ts
+   - [ ] server/api/instansi/[id]/kebijakan-diajukan.ts
+   - [ ] server/api/instansi/[id]/kebijakan-diproses.ts
+   - [ ] server/api/instansi/[id]/pilih-verifikator.ts
+   - [ ] server/api/instansi/policy/[agency_id]/index.ts
 
-- [x] 6. server/api/core/role/ (CRUD ✅ Test: /api/core/role )
-- [ ] 7. server/api/core/activeYear/ (CRUD)
-- [ ] 8. server/api/organizations/agencies/ (CRUD)
-- [ ] 9. server/api/policies/policy/ (CRUD with policyProgram join)
-- [ ] 10. server/api/ikk/ikkKiScore/ (CRUD)
-- [ ] 11. server/api/ikk/ikkKuScore/ (CRUD)
+### 3. Read & Align Schemas if queries fail
+   - [ ] server/db/schema/organization.ts
+   - [ ] server/db/schema/policy.ts
+   - [ ] server/db/schema/ikk.ts (if relevant)
 
-### Phase 3: Remaining Tables
-- [ ] 12. IKK related: ikkFile, ikkCatatan, ikkKnScore, ikkKoornas, ikkVerifikator
-- [ ] 13. Misc: helpdesk, suratJfak, etc.
-- [ ] 14. Relationships/validation enhancements
-- [ ] 15. Test all endpoints, generate types, frontend samples
+### 4. Test & Verify
+   - [ ] Run `nuxt dev`
+   - [ ] Test endpoints (e.g., curl POST/GET /api/instansi)
+   - [ ] Fix any Drizzle errors
 
-### Testing
-Run `pnpm dev` and test with curl/Postman:
-- GET /api/users/user
-- POST /api/core/instansi (body data)
- etc.
+### 5. Completion
+   - [ ] Update types/server-db.d.ts if needed
+   - [ ] attempt_completion
 
-Update this file as steps complete.

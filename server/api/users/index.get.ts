@@ -1,7 +1,8 @@
 import { defineEventHandler, getQuery } from 'h3'
 import { and, asc, eq, isNull, or } from 'drizzle-orm'
 import { db } from '../../db'
-import { instansi, suratPenunjukkan } from '../../db/schema/core'
+import { instansi } from '../../db/schema/instansi/instansi'
+import { suratPenunjukkan } from '../../db/schema/core'
 import { roleUser, user } from '../../db/schema/user'
 
 export default defineEventHandler(async (event) => {

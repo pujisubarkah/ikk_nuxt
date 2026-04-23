@@ -1,3 +1,5 @@
+export * from './instansi/instansi';
+export * from './instansi/instansiKategori';
 import * as core from './core';
 import * as organization from './organization';
 import * as userDomain from './user';

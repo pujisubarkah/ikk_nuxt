@@ -9,7 +9,7 @@ import {
   varchar,
 } from 'drizzle-orm/pg-core';
 import { ikkNew } from './_shared';
-import { instansi } from './core';
+import { instansi } from './instansi/instansi';
 
 export const suratJfak = ikkNew.table('Surat_JFAK', {
   id: bigint('id', { mode: 'number' }).primaryKey(),

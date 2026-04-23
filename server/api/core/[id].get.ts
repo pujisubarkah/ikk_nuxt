@@ -1,6 +1,6 @@
 import { defineEventHandler, getRouterParam } from 'h3'
 import { getById } from '../../utils/db'
-import { instansi } from '../../db/schema/core'
+import { instansi } from '../../db/schema/instansi/instansi'
 
 export default defineEventHandler(async (event) => {
   const id = getRouterParam(event, 'id')

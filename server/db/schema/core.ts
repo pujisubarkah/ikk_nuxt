@@ -7,27 +7,17 @@ import {
   timestamp,
   varchar,
 } from 'drizzle-orm/pg-core';
+
 import { ikkNew } from './_shared';
+import { instansiKategori } from './instansi/instansiKategori';
+import { instansi } from './instansi/instansi';
 
 export const activeYear = ikkNew.table('active_year', {
   id: bigserial('id', { mode: 'number' }).primaryKey(),
   active_year: bigint('active_year', { mode: 'number' }).unique(),
 });
 
-export const instansiKategori = ikkNew.table('instansi_kategori', {
-  id: integer('id').primaryKey(),
-  kat_instansi: varchar('kat_instansi'),
-});
 
-export const instansi = ikkNew.table('instansi', {
-  id: bigint('id', { mode: 'number' }).primaryKey(),
-  agency_id: bigint('agency_id', { mode: 'number' }).unique(),
-  agency_name: varchar('agency_name', { length: 226 }),
-  agency_category_id: integer('agency_category_id').references(() => instansiKategori.id, {
-    onDelete: 'no action',
-    onUpdate: 'no action',
-  }),
-});
 
 export const suratPenunjukkan = ikkNew.table('surat_penunjukkan', {
   id: bigserial('id', { mode: 'number' }).primaryKey(),

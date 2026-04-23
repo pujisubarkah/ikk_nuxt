@@ -1,7 +1,7 @@
 import { desc, eq, sql } from 'drizzle-orm'
 import { createError, defineEventHandler, getQuery, readBody, setResponseStatus } from 'h3'
 import { db } from '../../db'
-import { notifikasi } from '../../db/schema/policy'
+import { notifikasi } from '../../db/schema/policy.notifikasi'
 
 export default defineEventHandler(async (event) => {
   if (event.method === 'GET') {

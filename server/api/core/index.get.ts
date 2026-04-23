@@ -1,6 +1,6 @@
 import { defineEventHandler, getQuery } from 'h3'
 import { getAll } from '../../utils/db'
-import { instansi } from '../../db/schema/core'
+import { instansi } from '../../db/schema/instansi/instansi'
 
 export default defineEventHandler(async (event) => {
   const { limit = '50', offset = '0' } = getQuery(event)
