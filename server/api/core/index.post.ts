@@ -1,6 +1,6 @@
 import { defineEventHandler, readBody } from 'h3'
 import { create } from '../../utils/db'
-import { instansi } from '../../db/schema/instansi/instansi'
+import { instansi } from '../../db/schema/instansi'
 
 export default defineEventHandler(async (event) => {
   const body = await readBody(event)

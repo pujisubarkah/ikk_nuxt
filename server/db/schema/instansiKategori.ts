@@ -1,5 +1,5 @@
 import { integer, varchar } from 'drizzle-orm/pg-core';
-import { ikkNew } from '../_shared';
+import { ikkNew } from './_shared';
 
 export const instansiKategori = ikkNew.table('instansi_kategori', {
   id: integer('id').primaryKey(),

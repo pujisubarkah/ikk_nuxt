@@ -1,11 +1,13 @@
+import type { AnyPgColumn } from 'drizzle-orm/pg-core';
 import { bigint, varchar } from 'drizzle-orm/pg-core';
-import { ikkNew } from '../_shared';
-import { activeYear } from '../core';
-import { policy } from '../policy';
-import { user } from '../user';
+import { ikkNew } from './_shared';
+import { activeYear } from './activeYear';
+import { policy } from './policy';
+import { user } from './user';
+import type { PgTable } from 'drizzle-orm/pg-core';
 import { ikkKiScore } from './ikkKiScore';
 
-export const ikkFile = ikkNew.table('ikk_file', {
+export const ikkFile: PgTable<any> = ikkNew.table('ikk_file', {
   id: bigint('id', { mode: 'number' }).primaryKey(),
   policy_id: bigint('policy_id', { mode: 'number' }).references(() => policy.id, {
     onDelete: 'no action',
@@ -36,3 +38,5 @@ export const ikkFile = ikkNew.table('ikk_file', {
     onUpdate: 'no action',
   }),
 });
+
+export const ikkFileId = (ikkFile as any).id;

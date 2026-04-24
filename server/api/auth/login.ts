@@ -1,7 +1,7 @@
 import { defineEventHandler, readBody, sendError } from 'h3'
 import { db } from '../../db/index'
 import { user as userTable, roleUser as roleUserTable } from '../../db/schema/user'
-import { role as roleTable } from '../../db/schema/core'
+import { role as roleTable } from '../../db/schema/role'
 import { eq } from 'drizzle-orm'
 import bcrypt from 'bcryptjs'
 

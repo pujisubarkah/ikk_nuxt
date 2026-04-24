@@ -1,7 +1,7 @@
 import { eq } from 'drizzle-orm'
 import { createError, defineEventHandler, getRouterParam, readBody } from 'h3'
 import { db } from '../../db'
-import { suratPenunjukkan } from '../../db/schema/core'
+import { suratPenunjukkan } from '../../db/schema/suratPenunjukkan'
 import { user } from '../../db/schema/user'
 
 export default defineEventHandler(async (event) => {

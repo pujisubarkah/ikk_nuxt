@@ -1,8 +1,10 @@
 import { bigint, varchar } from 'drizzle-orm/pg-core';
-import { ikkNew } from '../_shared';
-import { activeYear } from '../core';
-import { policy } from '../policy';
-import { user } from '../user';
+import { ikkNew } from './_shared';
+import { activeYear } from './activeYear';
+import { policy } from './policy';
+import { user } from './user';
+
+import type { PgTable, AnyPgColumn } from 'drizzle-orm/pg-core';
 import { ikkKnScore } from './ikkKnScore';
 
 export const ikkKoornas = ikkNew.table('ikk_koornas', {
@@ -35,3 +37,5 @@ export const ikkKoornas = ikkNew.table('ikk_koornas', {
     onUpdate: 'no action',
   }),
 });
+
+export const ikkKoornasId: AnyPgColumn = ikkKoornas.id;

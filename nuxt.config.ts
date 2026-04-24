@@ -11,11 +11,11 @@ export default defineNuxtConfig({
   vite: {
     plugins: [tailwindcss()],
     optimizeDeps: {
-      include: ['@idds/vue', '@tabler/icons-vue'],
+      include: ['@idds/vue', 'vue3-apexcharts', '@vue-leaflet/vue-leaflet'],
     }
   },
   build: {
-    transpile: ['@idds/vue']
+    transpile: ['@idds/vue', '@tabler/icons-vue']
   },
   css: [
     '~/assets/css/main.css',

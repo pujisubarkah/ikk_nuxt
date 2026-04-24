@@ -1,7 +1,7 @@
 import { and, asc, eq, isNull, or } from 'drizzle-orm'
 import { defineEventHandler } from 'h3'
 import { db } from '../../db'
-import { instansi } from '../../db/schema/instansi/instansi'
+import { instansi } from '../../db/schema/instansi'
 import { koorInstansiValidator, roleUser, user } from '../../db/schema/user'
 
 const KOOR_INSTANSI_ROLE_ID = 4

@@ -1,5 +1,8 @@
 <template>
 	<div class="w-full px-4 md:px-8 py-6 md:py-10 bg-gray-50 min-h-screen">
+		<!-- Breadcrumb -->
+		<UiBreadcrumb :items="breadcrumbItems" class="mb-4 md:mb-6" />
+
 		<div
 			v-if="toast.show"
 			class="fixed right-4 top-4 z-50 max-w-md rounded-lg border px-4 py-3 shadow-lg"
@@ -271,6 +274,18 @@
 
 <script setup lang="ts">
 import UiPagination from '@/components/UI/UiPagination.vue';
+import UiBreadcrumb from '@/components/UI/UiBreadcrumb.vue';
+import { useRoute } from 'vue-router';
+
+const route = useRoute();
+const slug = computed(() => route.params.slug as string);
+
+const breadcrumbItems = computed(() => {
+	return [
+		{ label: 'Dashboard', href: `/${slug.value}/dashboard` }
+	];
+});
+
 // Pagination states
 const approvalPage = ref(1);
 const approvalPerPage = 10;

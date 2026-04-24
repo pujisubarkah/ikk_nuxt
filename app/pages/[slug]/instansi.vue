@@ -4,6 +4,7 @@
     <!-- Breadcrumb -->
     <UiBreadcrumb :items="breadcrumbItems" class="mb-4" />
 
+
     <div class="flex justify-between items-center mb-4">
       <h1 class="text-2xl font-bold">Daftar Instansi</h1>
       <div class="flex space-x-4 items-center">
@@ -19,6 +20,12 @@
           v-model="searchQuery"
           class="p-2 border rounded-lg"
         />
+        <select v-model="selectedActiveYear" class="p-2 border rounded-lg">
+          <option value="">Semua Tahun</option>
+          <option v-for="year in activeYears" :key="year.active_year" :value="year.active_year">
+            {{ year.active_year }}
+          </option>
+        </select>
       </div>
     </div>
 
@@ -81,19 +88,21 @@
         {{ index + 1 + (currentPage - 1) * itemsPerPage }}
       </template>
       <template #agency_name="{ item }: { item: any }">
-        {{ item.instansi?.agency_name || 'NA' }}
+        {{ item.name || item.instansi?.agency_name || 'NA' }}
+      </template>
+      <template #kategori="{ item }: { item: any }">
+        {{ item.category || item.kategori || '-' }}
       </template>
       <template #active_year="{ item }: { item: any }">
         {{ item.active_year }}
       </template>
       <template #aksi="{ item }: { item: any }">
-        <button
+        <UiButton
           @click="editInstansi(item)"
           class="flex justify-center items-center bg-blue-600 text-white hover:bg-blue-700 rounded-md py-2 px-4 transition duration-200"
         >
-          <Icon name="fa6-solid:pen-to-square" class="mr-2" />
-          Edit
-        </button>
+          <IconEdit class="mr-2" />
+        </UiButton>
       </template>
       <template #empty>
         <span class="text-gray-400">Tidak ada data</span>
@@ -101,27 +110,14 @@
     </UiTable>
 
       <!-- Pagination Controls -->
-      <div v-if="filteredData.length > itemsPerPage" class="mt-6 flex justify-between items-center text-sm">
-        <span>
-          Halaman {{ currentPage }} dari {{ totalPages }}
-        </span>
-        <div class="space-x-2">
-          <button
-            class="border border-gray-300 px-4 py-2 rounded"
-            :disabled="currentPage === 1"
-            @click="handlePrevPage"
-          >
-            Sebelumnya
-          </button>
-          <button
-            class="border border-gray-300 px-4 py-2 rounded"
-            :disabled="currentPage === totalPages"
-            @click="handleNextPage"
-          >
-            Berikutnya
-          </button>
-        </div>
-      </div>
+      <UiPagination
+        v-if="filteredData.length > itemsPerPage"
+        class="mt-6"
+        :page="currentPage"
+        :per-page="itemsPerPage"
+        :total="filteredData.length"
+        @update:page="(val) => currentPage = val"
+      />
     </div>
 </template>
 
@@ -132,20 +128,29 @@ import { useRouter } from 'vue-router'
 import UiTable from '@/components/UI/UiTable.vue'
 import UiBreadcrumb from '@/components/UI/UiBreadcrumb.vue'
 import { useRoute } from 'vue-router'
+import { IconEdit } from '@tabler/icons-vue';
+import UiPagination from '@/components/UI/UiPagination.vue';
 const route = useRoute()
 const slug = computed(() => route.params.slug as string)
 
 // Breadcrumb items
-const breadcrumbItems = computed(() => [
-  { label: 'Dashboard', href: '/' },
-  { label: 'Instansi', href: `/${slug.value}/instansi` },
-  { label: 'Daftar Instansi' },
-])
+const breadcrumbItems = computed(() => {
+  const items = [
+    { label: 'Dashboard', href: `/${slug.value}/dashboard` },
+    { label: 'Daftar Instansi', href: `/${slug.value}/instansi` }
+  ]
+  // Contoh: jika ada parameter id (untuk detail/edit)
+  if (route.params.id) {
+    items.push({ label: `Detail Instansi ${route.params.id}`, href: `/${slug.value}/instansi/${route.params.id}` })
+  }
+  return items
+})
 
 // Table headers
 const tableHeaders = [
   { text: 'No', value: 'no', center: true, width: '60px' },
   { text: 'Nama Instansi', value: 'agency_name' },
+  { text: 'Kategori', value: 'kategori', center: true },
   { text: 'Tahun Penilaian', value: 'active_year', center: true },
   { text: 'Aksi', value: 'aksi', center: true, width: '120px' },
 ]
@@ -154,11 +159,16 @@ const tableHeaders = [
 const searchQuery = ref('')
 const instansiData = ref<any[]>([])
 const instansiDataPanrb = ref<any[]>([])
+
 const showPopup = ref(false)
 const selectedAgencyId = ref('')
 const activeYear = ref('')
 const currentPage = ref(1)
 const itemsPerPage = 20
+
+// Tahun aktif
+const activeYears = ref<any[]>([])
+const selectedActiveYear = ref('')
 
 // Fetch Data
 const fetchInstansiData = async () => {
@@ -182,15 +192,35 @@ const fetchInstansiDataPanrb = async () => {
 
 onMounted(() => {
   fetchInstansiData()
+  fetchActiveYears()
 })
 
+const fetchActiveYears = async () => {
+  try {
+    const { data } = await useFetch('/api/active_year')
+    activeYears.value = Array.isArray(data.value) ? data.value : []
+    // Jika tahun 2025 dan 2026 belum ada, tambahkan manual (untuk demo)
+    const tahunList = activeYears.value.map(y => y.active_year)
+    if (!tahunList.includes(2025)) activeYears.value.push({ active_year: 2025 })
+    if (!tahunList.includes(2026)) activeYears.value.push({ active_year: 2026 })
+    // Urutkan descending
+    activeYears.value.sort((a, b) => b.active_year - a.active_year)
+  } catch (error) {
+    activeYears.value = [{ active_year: 2026 }, { active_year: 2025 }]
+  }
+}
+
 // Filtering & Pagination
-const filteredData = computed(() =>
-  instansiData.value.filter(item =>
+const filteredData = computed(() => {
+  let data = instansiData.value
+  if (selectedActiveYear.value) {
+    data = data.filter(item => String(item.active_year) === String(selectedActiveYear.value))
+  }
+  return data.filter(item =>
     (item.instansi?.agency_name || '').toLowerCase().includes(searchQuery.value.toLowerCase()) ||
     (item.active_year?.toString() || '').toLowerCase().includes(searchQuery.value.toLowerCase())
   )
-)
+})
 
 const totalPages = computed(() => Math.ceil(filteredData.value.length / itemsPerPage))
 const indexOfLastItem = computed(() => currentPage.value * itemsPerPage)
@@ -230,10 +260,13 @@ const handleAddInstansi = async () => {
   }
 }
 
+
 // Edit Instansi (dummy)
 const editInstansi = (item: any) => {
   alert(`Edit ${item.instansi?.agency_name ?? 'NA'}`)
 }
+
+
 
 definePageMeta({
   layout: 'sidebar',

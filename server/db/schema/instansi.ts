@@ -1,5 +1,5 @@
 import { bigint, integer, varchar } from 'drizzle-orm/pg-core';
-import { ikkNew } from '../_shared';
+import { ikkNew } from './_shared';
 import { instansiKategori } from './instansiKategori';
 
 export const instansi = ikkNew.table('instansi', {

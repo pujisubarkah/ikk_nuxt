@@ -1,9 +1,9 @@
 
 import { H3Event, sendError } from 'h3';
 import { db } from '../../../../db';
-import { instansi } from '../../../../db/schema/instansi/instansi';
+import { instansi } from '../../../../db/schema/instansi';
 import { policy } from '../../../../db/schema/policy';
-import { instansiKategori } from '../../../../db/schema/instansi/instansiKategori';
+import { instansiKategori } from '../../../../db/schema/instansiKategori';
 import { eq } from 'drizzle-orm';
 
 export default defineEventHandler(async (event: H3Event) => {

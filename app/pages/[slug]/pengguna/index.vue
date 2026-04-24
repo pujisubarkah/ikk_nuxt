@@ -1,5 +1,7 @@
 <template>
   <div class="w-full px-6 py-8">
+    <UiBreadcrumb :items="breadcrumbItems" class="mb-4" />
+
     <div class="flex justify-between items-center mb-4">
       <h1 class="text-2xl font-bold">Data Pengguna</h1>
       <div class="flex flex-col md:flex-row md:items-center gap-2">
@@ -11,6 +13,12 @@
           class="w-60"
           @input="currentPage = 1"
         />
+        <select v-model="selectedActiveYear" class="p-2 border rounded-lg">
+          <option value="">Semua Tahun</option>
+          <option v-for="year in activeYears" :key="year.active_year" :value="year.active_year">
+            {{ year.active_year }}
+          </option>
+        </select>
       </div>
     </div>
 
@@ -117,10 +125,21 @@ import { useRouter, useRoute } from 'vue-router'
 import UiTable from '@/components/UI/UiTable.vue'
 import UiButton from '@/components/UI/UiButton.vue'
 import UiInput from '@/components/UI/UiInput.vue'
+import UiBreadcrumb from '@/components/UI/UiBreadcrumb.vue'
 import { IconEdit, IconTrash } from '@tabler/icons-vue'
 import { useFetch } from '#app'
 import UiPagination from '@/components/UI/UiPagination.vue'
 // import toast from plugin vue-sonner/vue-toastification jika ada
+
+const route = useRoute()
+const slug = computed(() => route.params.slug as string)
+
+const breadcrumbItems = computed(() => {
+  return [
+    { label: 'Dashboard', href: `/${slug.value}/dashboard` },
+    { label: 'Data Pengguna', href: `/${slug.value}/pengguna` }
+  ]
+})
 
 const tabs = [
   'Koordinator Nasional',
@@ -151,6 +170,8 @@ interface User {
 }
 
 const searchQuery = ref('')
+const activeYears = ref<any[]>([])
+const selectedActiveYear = ref('')
 const activeTab = ref(tabs[0])
 const currentPage = ref(1)
 const router = useRouter()
@@ -170,20 +191,43 @@ const { data, error, pending: isLoading, refresh } = useFetch<User[]>(() =>
   `/api/users?role_id=${getRoleIdFromTab(activeTab.value ?? '')}`
 )
 
+// Fetch active years
+const fetchActiveYears = async () => {
+  try {
+    const { data } = await useFetch('/api/active_year')
+    activeYears.value = Array.isArray(data.value) ? data.value : []
+    // Demo: tambahkan tahun 2025/2026 jika belum ada
+    const tahunList = activeYears.value.map(y => y.active_year)
+    if (!tahunList.includes(2025)) activeYears.value.push({ active_year: 2025 })
+    if (!tahunList.includes(2026)) activeYears.value.push({ active_year: 2026 })
+    activeYears.value.sort((a, b) => b.active_year - a.active_year)
+  } catch (error) {
+    activeYears.value = [{ active_year: 2026 }, { active_year: 2025 }]
+  }
+}
+
+onMounted(() => {
+  fetchActiveYears()
+})
+
 watch(activeTab, () => {
   currentPage.value = 1
   refresh()
 })
 
-const filteredData = computed(() =>
-  (data.value ?? []).filter(
+const filteredData = computed(() => {
+  let users = data.value ?? []
+  if (selectedActiveYear.value) {
+    users = users.filter(item => String(item.active_year) === String(selectedActiveYear.value))
+  }
+  return users.filter(
     (item) =>
       (item.name ?? '').toLowerCase().includes(searchQuery.value.toLowerCase()) ||
       (item.instansi?.agency_name ?? '').toLowerCase().includes(searchQuery.value.toLowerCase()) ||
       (item.active_year ?? '').toLowerCase().includes(searchQuery.value.toLowerCase()) ||
       (item.username ?? '').toLowerCase().includes(searchQuery.value.toLowerCase())
   )
-)
+})
 
 const totalPages = computed(() => Math.ceil(filteredData.value.length / USERS_PER_PAGE))
 const startIndex = computed(() => (currentPage.value - 1) * USERS_PER_PAGE)

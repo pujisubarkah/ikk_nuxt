@@ -6,9 +6,11 @@ import {
   varchar,
 } from 'drizzle-orm/pg-core';
 import { ikkNew } from './_shared';
-import { activeYear, role, suratPenunjukkan } from './core';
-import { instansi } from './instansi/instansi';
-import { agencies } from './organization';
+import { activeYear } from './activeYear';
+import { role } from './role';
+import { suratPenunjukkan } from './suratPenunjukkan';
+import { instansi } from './instansi';
+import { agencies } from './agencies';
 
 const bit1 = customType<{ data: string }>({
   dataType() {

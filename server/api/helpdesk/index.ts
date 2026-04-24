@@ -1,7 +1,7 @@
 import { desc } from 'drizzle-orm'
 import { createError, defineEventHandler, readBody, setResponseStatus } from 'h3'
 import { db } from '../../db'
-import { helpdesk } from '../../db/schema/misc'
+import { helpdesk } from '../../db/schema/helpdesk'
 
 export default defineEventHandler(async (event) => {
   if (event.method === 'GET') {

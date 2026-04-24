@@ -1,7 +1,7 @@
 import { bigint, varchar } from 'drizzle-orm/pg-core';
-import { ikkNew } from '../_shared';
-import { policy } from '../policy';
-import { user } from '../user';
+import { ikkNew } from './_shared';
+import { policy } from './policy';
+import { user } from './user';
 import { ikkKuScore } from './ikkKuScore';
 
 export const ikkVerifikator = ikkNew.table('ikk_verifikator', {

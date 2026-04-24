@@ -6,8 +6,7 @@ import {
   varchar,
 } from 'drizzle-orm/pg-core';
 import { ikkNew } from './_shared';
-import { activeYear } from './core';
-import { instansi } from './instansi/instansi';
+import { instansi } from './instansi';
 
 export const agencies = ikkNew.table('agencies', {
   id: bigserial('id', { mode: 'number' }).primaryKey(),
@@ -24,9 +23,6 @@ export const agencies = ikkNew.table('agencies', {
     onDelete: 'no action',
     onUpdate: 'no action',
   }),
-  active_year: bigint('active_year', { mode: 'number' }).references(() => activeYear.active_year, {
-    onDelete: 'no action',
-    onUpdate: 'no action',
-  }),
+  active_year: bigint('active_year', { mode: 'number' }),
   melibatkan_jf_analis: boolean('melibatkan_jf_analis'),
 });

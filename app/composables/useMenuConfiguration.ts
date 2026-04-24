@@ -95,7 +95,135 @@ export function useMenuConfiguration() {
     },
   ]);
 
+  // Role 2 - Koordinator Nasional / Koordinator Utama
+  const menuGroupsRole2 = computed<SidebarMenuGroup[]>(() => [
+    {
+      key: 'home',
+      groupLabel: '',
+      items: [
+        {
+          key: 'home',
+          label: 'Home',
+          icon: IconHome,
+          to: `/${slug.value}/dashboard`,
+        },
+      ],
+    },
+    {
+      key: 'main',
+      groupLabel: 'Menu Utama',
+      items: [
+        {
+          key: 'data-kebijakan',
+          label: 'Data Kebijakan',
+          icon: IconFileText,
+          to: `/${slug.value}/daftar-kebijakan`,
+        },
+        {
+          key: 'verifikator',
+          label: 'Verifikator',
+          icon: IconUsers,
+          to: `/${slug.value}/pengguna`,
+        },
+      ],
+    },
+  ]);
+
+  // Role 3 - Verifikator
+  const menuGroupsRole3 = computed<SidebarMenuGroup[]>(() => [
+    {
+      key: 'home',
+      groupLabel: '',
+      items: [
+        {
+          key: 'home',
+          label: 'Home',
+          icon: IconHome,
+          to: `/${slug.value}/dashboard`,
+        },
+      ],
+    },
+    {
+      key: 'main',
+      groupLabel: 'Menu Utama',
+      items: [
+        {
+          key: 'daftar-kebijakan',
+          label: 'Daftar Kebijakan',
+          icon: IconFileText,
+          to: `/${slug.value}/verifikasi-kebijakan`,
+        },
+      ],
+    },
+  ]);
+
+  // Role 4 - Koordinator Instansi
+  const menuGroupsRole4 = computed<SidebarMenuGroup[]>(() => [
+    {
+      key: 'home',
+      groupLabel: '',
+      items: [
+        {
+          key: 'home',
+          label: 'Home',
+          icon: IconHome,
+          to: `/${slug.value}/dashboard`,
+        },
+      ],
+    },
+    {
+      key: 'main',
+      groupLabel: 'Menu Utama',
+      items: [
+        {
+          key: 'daftar-kebijakan',
+          label: 'Daftar Kebijakan',
+          icon: IconFileText,
+          to: `/${slug.value}/daftar-kebijakan`,
+        },
+        {
+          key: 'analis-instansi',
+          label: 'Analis Instansi',
+          icon: IconUsers,
+          to: `/${slug.value}/enumerator`,
+        },
+      ],
+    },
+  ]);
+
+  // Role 5 - Analis Instansi / Enumerator
+  const menuGroupsRole5 = computed<SidebarMenuGroup[]>(() => [
+    {
+      key: 'home',
+      groupLabel: '',
+      items: [
+        {
+          key: 'home',
+          label: 'Home',
+          icon: IconHome,
+          to: `/${slug.value}/dashboard`,
+        },
+      ],
+    },
+    {
+      key: 'main',
+      groupLabel: 'Menu Utama',
+      items: [
+        {
+          key: 'daftar-kebijakan',
+          label: 'Daftar Kebijakan',
+          icon: IconFileText,
+          to: `/${slug.value}/kebijakan`,
+        },
+      ],
+    },
+  ]);
+
   return {
     menuGroupsRole1,
+    menuGroupsRole2,
+    menuGroupsRole3,
+    menuGroupsRole4,
+    menuGroupsRole5,
   };
 }

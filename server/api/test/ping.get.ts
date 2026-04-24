@@ -1,7 +1,7 @@
 import { defineEventHandler } from 'h3'
 import { sql } from 'drizzle-orm'
 import { db } from '../../db'
-import { instansi } from '../../db/schema/instansi/instansi'
+import { instansi } from '../../db/schema/instansi'
 
 export default defineEventHandler(async () => {
   try {

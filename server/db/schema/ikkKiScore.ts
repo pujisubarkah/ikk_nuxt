@@ -1,14 +1,20 @@
-import { sql } from 'drizzle-orm';
-import { bigint, boolean, real, varchar } from 'drizzle-orm/pg-core';
-import { ikkNew } from '../_shared';
-import { activeYear } from '../core';
-import { policy } from '../policy';
-import { user } from '../user';
-import { ikkKoornas } from './ikkKoornas';
 
-export const ikkKnScore = ikkNew.table('ikk_kn_score', {
+import { sql } from 'drizzle-orm';
+import { bigint, boolean, json, real, varchar } from 'drizzle-orm/pg-core';
+import { ikkNew } from './_shared';
+import { activeYear } from './activeYear';
+import { agencies } from './agencies';
+import { policy } from './policy';
+import { user } from './user';
+import { ikkCatatan, ikkCatatanId } from './ikkCatatan';
+import { ikkFile, ikkFileId } from './ikkFile';
+
+export const ikkKiScore = ikkNew.table('ikk_ki_score', {
   id: bigint('id', { mode: 'number' }).primaryKey(),
-  agency_id: bigint('agency_id', { mode: 'number' }),
+  agency_id: bigint('agency_id', { mode: 'number' }).references(() => agencies.id, {
+    onDelete: 'no action',
+    onUpdate: 'no action',
+  }),
   policy_id: bigint('policy_id', { mode: 'number' }).references(() => policy.id, {
     onDelete: 'no action',
     onUpdate: 'no action',
@@ -33,21 +39,8 @@ export const ikkKnScore = ikkNew.table('ikk_kn_score', {
     onDelete: 'no action',
     onUpdate: 'no action',
   }),
-  informasi_a: varchar('informasi_a'),
-  informasi_b: varchar('informasi_b'),
-  informasi_c: varchar('informasi_c'),
-  informasi_d: varchar('informasi_d'),
-  informasi_jf: varchar('informasi_jf'),
-  modified_id: bigint('modified_id', { mode: 'number' }),
-  ikk_koornas: bigint('ikk_koornas', { mode: 'number' }).references(() => ikkKoornas.id, {
-    onDelete: 'no action',
-    onUpdate: 'no action',
-  }),
   a_total_score: real('a_total_score').default(
     sql`(((0.375 * (a1)::numeric) + (0.375 * (a2)::numeric)) + (0.25 * (a3)::numeric))`
-  ),
-  b_total_score: real('b_total_score').default(
-    sql`(((0.35 * (b1)::numeric) + (0.35 * (b2)::numeric)) + (0.30 * (b3)::numeric))`
   ),
   c_total_score: real('c_total_score').default(
     sql`(((0.35 * (c1)::numeric) + (0.35 * (c2)::numeric)) + (0.30 * (c3)::numeric))`
@@ -55,7 +48,28 @@ export const ikkKnScore = ikkNew.table('ikk_kn_score', {
   d_total_score: real('d_total_score').default(
     sql`((0.50 * (d1)::numeric) + (0.50 * (d2)::numeric))`
   ),
+  informasi_a: varchar('informasi_a'),
+  informasi_b: varchar('informasi_b'),
+  informasi_c: varchar('informasi_c'),
+  informasi_d: varchar('informasi_d'),
+  informasi_jf: varchar('informasi_jf'),
+  modified_by: bigint('modified_by', { mode: 'number' }),
+  ikk_file: bigint('ikk_file', { mode: 'number' }).references(() => ikkFileId, {
+    onDelete: 'no action',
+    onUpdate: 'no action',
+  }),
   ikk_total_score: real('ikk_total_score').default(
     sql`(((((0.20 * (((0.375 * (a1)::numeric) + (0.375 * (a2)::numeric)) + (0.25 * (a3)::numeric))) + (0.25 * (((0.35 * (b1)::numeric) + (0.35 * (b2)::numeric)) + (0.30 * (b3)::numeric)))) + (0.30 * (((0.35 * (c1)::numeric) + (0.35 * (c2)::numeric)) + (0.30 * (c3)::numeric)))) + (0.15 * ((0.50 * (d1)::numeric) + (0.50 * (d2)::numeric)))) + ((10 * CASE WHEN jf THEN 1 ELSE 0 END))::numeric)`
   ),
+  ikk_catatan: bigint('ikk_catatan', { mode: 'number' }).references(() => ikkCatatanId, {
+    onDelete: 'no action',
+    onUpdate: 'no action',
+  }),
+  analis_anwer: json('analis_anwer'),
+  koorins_answer: json('koorins_answer'),
+  b_total_score: real('b_total_score').default(
+    sql`(((0.35 * (b1)::numeric) + (0.35 * (b2)::numeric)) + (0.30 * (b3)::numeric))`
+  ),
 });
+
+export const ikkKiScoreId = (ikkKiScore as any).id;

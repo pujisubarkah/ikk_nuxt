@@ -1,11 +1,12 @@
 import { bigint, varchar } from 'drizzle-orm/pg-core';
-import { ikkNew } from '../_shared';
-import { activeYear } from '../core';
-import { policy } from '../policy';
-import { user } from '../user';
-import { ikkKiScore } from './ikkKiScore';
+import { ikkNew } from './_shared';
+import { activeYear } from './activeYear';
+import { policy } from './policy';
+import { user } from './user';
+import { ikkKiScoreId } from './ikkKiScore';
+import type { PgTable } from 'drizzle-orm/pg-core';
 
-export const ikkCatatan = ikkNew.table('ikk_catatan', {
+export const ikkCatatan: PgTable = ikkNew.table('ikk_catatan', {
   id: bigint('id', { mode: 'number' }).primaryKey(),
   policy_id: bigint('policy_id', { mode: 'number' }).references(() => policy.id, {
     onDelete: 'no action',
@@ -30,8 +31,10 @@ export const ikkCatatan = ikkNew.table('ikk_catatan', {
     onDelete: 'no action',
     onUpdate: 'no action',
   }),
-  iki_score_id: bigint('iki_score_id', { mode: 'number' }).references(() => ikkKiScore.id, {
+  iki_score_id: bigint('iki_score_id', { mode: 'number' }).references(() => ikkKiScoreId, {
     onDelete: 'no action',
     onUpdate: 'no action',
   }),
 });
+
+export const ikkCatatanId = (ikkCatatan as any).id;
