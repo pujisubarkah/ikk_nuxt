@@ -23,7 +23,7 @@
 
 ### 4. Test & Verify
    - [ ] Run `nuxt dev`
-   - [ ] Test endpoints (e.g., curl POST/GET /api/instansi)
+   - [ ] Test endpoints (e.g. curl POST/GET /api/instansi)
    - [ ] Fix any Drizzle errors
 
 ### 5. Completion

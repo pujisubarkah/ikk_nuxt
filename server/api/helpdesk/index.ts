@@ -15,10 +15,12 @@ export default defineEventHandler(async (event) => {
       throw createError({ statusCode: 400, statusMessage: 'Body tidak valid' })
     }
 
+
     const payload = body as {
       nama_lengkap?: string
       email_aktif?: string
       instansi?: string | null
+      kategori?: string | null
       masalah?: string | null
       pesan?: string | null
     }
@@ -27,12 +29,14 @@ export default defineEventHandler(async (event) => {
       throw createError({ statusCode: 400, statusMessage: 'Nama lengkap dan email aktif wajib diisi' })
     }
 
+
     const [inserted] = await db
       .insert(helpdesk)
       .values({
         nama_lengkap: payload.nama_lengkap,
         email_aktif: payload.email_aktif,
         instansi: payload.instansi ?? null,
+        kategori: payload.kategori ?? null,
         masalah: payload.masalah ?? null,
         pesan: payload.pesan ?? null,
       })

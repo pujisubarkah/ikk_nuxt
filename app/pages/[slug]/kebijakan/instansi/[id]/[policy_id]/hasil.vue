@@ -418,19 +418,7 @@ const handleExportPDF = async () => {
   try {
     await new Promise(resolve => setTimeout(resolve, 500)) // delay animasi
     
-    // Asumsi exportToPDF adalah fungsi sinkronous atau asinkronous
-    // await exportToPDF({
-    //   policy: policy.value,
-    //   questionsByDimension: questionsByDimension.value,
-    //   selfAssessmentAnswers: selfAssessmentAnswers.value,
-    //   selfAssessmentNotes: selfAssessmentNotes.value,
-    //   selfAssessmentFileUrls: selfAssessmentFileUrls.value,
-    //   verifikatorAnswers: verifikatorAnswers.value,
-    //   verifikatorNotes: verifikatorNotes.value,
-    //   koornasAnswers: koornasAnswers.value,
-    //   koornasNotes: koornasNotes.value,
-    //   jfData: jfData.value,
-    // })
+  
     toast.info('Fungsi export PDF belum tersedia/dimigrasi.')
     
     toast.success('File PDF berhasil diunduh!')
@@ -453,18 +441,7 @@ const handleExportExcel = async () => {
   try {
     await new Promise(resolve => setTimeout(resolve, 500))
     
-    // await exportToExcel({
-    //   policy: policy.value,
-    //   questionsByDimension: questionsByDimension.value,
-    //   selfAssessmentAnswers: selfAssessmentAnswers.value,
-    //   selfAssessmentNotes: selfAssessmentNotes.value,
-    //   selfAssessmentFileUrls: selfAssessmentFileUrls.value,
-    //   verifikatorAnswers: verifikatorAnswers.value,
-    //   verifikatorNotes: verifikatorNotes.value,
-    //   koornasAnswers: koornasAnswers.value,
-    //   koornasNotes: koornasNotes.value,
-    //   jfData: jfData.value,
-    // })
+   
     toast.info('Fungsi export Excel belum tersedia/dimigrasi.')
     
     toast.success('File Excel berhasil diunduh!')

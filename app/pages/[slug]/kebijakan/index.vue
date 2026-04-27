@@ -6,7 +6,7 @@
       <h1 class="text-2xl font-bold">Daftar Instansi</h1>
       <button
         @click="handleUnduhExcel"
-        class="bg-green-500 hover:bg-green-600 text-white font-semibold px-4 py-2 rounded-lg transition-colors"
+        class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded-lg transition-colors"
       >
         Unduh Data
       </button>
@@ -24,8 +24,8 @@
               <span class="font-medium">{{ stat.total }}</span>
             </div>
             <div class="flex justify-between text-xs">
-              <span class="text-green-600">Ada Kebijakan:</span>
-              <span class="font-medium text-green-600">{{ stat.withPolicy }}</span>
+              <span class="text-blue-600">Ada Kebijakan:</span>
+              <span class="font-medium text-blue-600">{{ stat.withPolicy }}</span>
             </div>
             <div class="flex justify-between text-xs">
               <span class="text-red-600">Belum Ada:</span>
@@ -38,7 +38,7 @@
               </div>
               <div class="w-full bg-gray-200 rounded-full h-2">
                 <div 
-                  class="bg-green-500 h-2 rounded-full transition-all duration-300" 
+                  class="bg-blue-600 h-2 rounded-full transition-all duration-300" 
                   :style="{ width: `${stat.percentage}%` }"
                 ></div>
               </div>
@@ -99,7 +99,7 @@
               :class="[
                 'px-4 py-1.5 rounded text-xs shadow flex items-center justify-center space-x-2 transition-colors',
                 item.policy
-                  ? 'bg-green-500 hover:bg-green-600 text-white cursor-pointer' 
+                  ? 'bg-blue-600 hover:bg-blue-700 text-white cursor-pointer' 
                   : 'bg-gray-300 text-gray-600 cursor-not-allowed'
               ]"
               :disabled="!item.policy"

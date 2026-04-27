@@ -12,12 +12,12 @@
           <img :src="image" :alt="`Background ${index + 1}`" class="w-full h-full object-cover" />
         </div>
       </div>
-      <div v-else class="absolute inset-0 bg-gradient-to-br from-[#0f4a7a] via-[#16578d] to-[#1e67a3]" />
-      <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-black/15 to-transparent" />
+      <div v-else class="absolute inset-0 bg-linear-to-br from-[#0f4a7a] via-[#16578d] to-[#1e67a3]" />
+      <div class="absolute inset-0 bg-linear-to-t from-black/50 via-black/15 to-transparent" />
     </div>
 
     <!-- 📱 Main Content -->
-    <main class="relative z-10 flex-grow flex items-center justify-center px-4 py-8 sm:py-12">
+    <main class="relative z-10 grow flex items-center justify-center px-4 py-8 sm:py-12">
       <div class="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
         
         <!-- ℹ️ Info Card -->
@@ -29,7 +29,7 @@
             </span>
             <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 leading-tight">
               Sistem Informasi
-              <span class="block bg-gradient-to-r from-[#16578d] to-blue-500 bg-clip-text text-transparent mt-1">
+              <span class="block bg-linear-to-r from-[#16578d] to-blue-500 bg-clip-text text-transparent mt-1">
                 Pengukuran Kualitas Kebijakan
               </span>
             </h1>
@@ -55,7 +55,7 @@
               <p class="text-gray-500 text-sm mt-1">Silakan masuk untuk mengakses sistem</p>
             </div>
 
-            <form class="space-y-5" @submit="handleSubmit">
+            <form class="space-y-5" @submit.prevent="handleSubmit">
               <!-- Username -->
               <div class="group relative flex items-center rounded-xl border border-gray-200 bg-white/60 px-3 py-2 focus-within:border-[#16578d] focus-within:ring-2 focus-within:ring-[#16578d]/20 transition-all duration-200">
                 <IconUser class="w-5 h-5 text-gray-400 group-focus-within:text-[#16578d] transition-colors mr-2" />
@@ -83,7 +83,7 @@
                   <input type="checkbox" class="w-4 h-4 rounded border-gray-300 text-[#16578d] focus:ring-[#16578d] transition" />
                   <span class="text-gray-600">Ingat saya</span>
                 </label>
-                <Button hierarchy="link" class="text-[#16578d] hover:text-blue-600 font-medium text-sm transition-colors">Lupa Password?</Button>
+                <Button type="button" hierarchy="link" class="text-[#16578d] hover:text-blue-600 font-medium text-sm transition-colors">Lupa Password?</Button>
               </div>
 
               <Button 
@@ -122,7 +122,7 @@
           <h2 class="text-xl font-bold text-gray-800 mb-2">Login Berhasil!</h2>
           <p class="text-gray-500 mb-4 text-sm">Selamat datang kembali! Anda akan diarahkan ke Dashboard...</p>
           <div class="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
-            <div class="bg-gradient-to-r from-green-400 to-green-600 h-2 rounded-full animate-progress" />
+            <div class="bg-linear-to-r from-green-400 to-green-600 h-2 rounded-full animate-progress" />
           </div>
         </div>
       </div>
@@ -138,7 +138,7 @@
           <h2 class="text-xl font-bold text-gray-800 mb-2">Login Gagal!</h2>
           <p class="text-gray-500 mb-5 text-sm">{{ error }}</p>
           <button
-            class="w-full py-2.5 bg-gradient-to-r from-[#16578d] to-blue-600 text-white font-semibold rounded-xl hover:from-[#12466f] hover:to-blue-700 transition-all duration-300 shadow-md hover:shadow-lg"
+            class="w-full py-2.5 bg-linear-to-r from-[#16578d] to-blue-600 text-white font-semibold rounded-xl hover:from-[#12466f] hover:to-blue-700 transition-all duration-300 shadow-md hover:shadow-lg"
             @click="showErrorModal = false"
           >
             Coba Lagi
@@ -150,7 +150,7 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted, ref } from 'vue';
+import { defineComponent, h, onBeforeUnmount, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { Button, TextField, PasswordInput } from '@idds/vue';
 import { useAuthStore } from '~/store/auth';

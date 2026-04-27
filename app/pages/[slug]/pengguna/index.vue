@@ -68,7 +68,7 @@
           <span v-else class="text-gray-500">Tidak Ada</span>
         </template>
         <template v-if="activeTab === 'Koordinator Instansi'" #jfak="{ item, index }: { item: any, index: number }">
-          <span v-if="item.surat_penunjukkan?.melibatkan_jf_analis" class="text-green-500">✔</span>
+          <span v-if="item.surat_penunjukkan?.melibatkan_jf_analis" class="text-blue-600">✔</span>
           <span v-else class="text-red-500">✘</span>
         </template>
         <template #status="{ item, index }: { item: any, index: number }">
@@ -76,7 +76,7 @@
             :class="[
               'px-2 py-1 text-xs font-semibold rounded-full',
               item.status?.toLowerCase() === 'aktif'
-                ? 'bg-green-200 text-green-800'
+                ? 'bg-blue-200 text-blue-800'
                 : 'bg-red-200 text-red-800'
             ]"
           >

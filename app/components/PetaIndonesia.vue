@@ -74,7 +74,7 @@
 
       <div
         v-if="filter !== 'kementerian'"
-        class="absolute bottom-4 right-4 z-[500] rounded-lg bg-white p-3 text-sm leading-relaxed shadow-md"
+        class="absolute bottom-4 right-4 z-500 rounded-lg bg-white p-3 text-sm leading-relaxed shadow-md"
       >
         <strong>Legenda</strong><br>
         <span class="inline-block w-4 h-4 rounded-sm bg-[#3182ce] mr-2 align-middle" />
