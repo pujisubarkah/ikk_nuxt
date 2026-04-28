@@ -181,16 +181,16 @@ const normalizeName = (name: string): string =>
     .trim();
 
 const highlightNames = computed(() =>
-  filter.value === 'provinsi' && apiData.value
+  filter.value === 'provinsi' && apiData.value && Array.isArray(apiData.value.data)
     ? apiData.value.data
-        .filter((item: any) => !!item[`predikat_${selectedYear.value}`])
+        .filter((item: any) => !!item.predikat)
         .map((item: any) => normalizeName(item.instansi_nama || ''))
     : []
 );
 const highlightCodes = computed(() =>
-  filter.value === 'kabupaten' && apiData.value
+  filter.value === 'kabupaten' && apiData.value && Array.isArray(apiData.value.data)
     ? apiData.value.data
-        .filter((item: any) => !!item[`predikat_${selectedYear.value}`])
+        .filter((item: any) => !!item.predikat)
         .map((item: any) => String(item.kd_kabkot))
     : []
 );
@@ -227,19 +227,7 @@ const onEachFeature = (feature: any, layer: any) => {
 };
 
 const filteredData = computed(() => {
-  if (filter.value === 'kementerian' && geoData.value) {
-    return {
-      ...geoData.value,
-      features: geoData.value.features.filter((feature: any) => {
-        const name =
-          (feature.properties?.Propinsi ??
-            feature.properties?.kabupaten ??
-            feature.properties?.nama ??
-            '').toUpperCase();
-        return name.includes('JAKARTA');
-      }),
-    };
-  }
+  // Tampilkan semua polygon untuk semua filter
   return geoData.value;
 });
 
