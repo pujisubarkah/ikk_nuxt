@@ -61,7 +61,7 @@
         />
         <template v-if="filter === 'kementerian' && apiData">
           <l-marker
-            v-for="(item, idx) in apiData.data.filter((i) => i[`predikat_${selectedYear}`])"
+            v-for="(item, idx) in apiData.data.filter((i) => !!i.predikat)"
             :key="`lembaga-${idx}`"
             :lat-lng="getKementerianLatLng(item)"
           >
@@ -76,11 +76,11 @@
         v-if="filter !== 'kementerian'"
         class="absolute bottom-4 right-4 z-500 rounded-lg bg-white p-3 text-sm leading-relaxed shadow-md"
       >
-        <strong>Legenda</strong><br>
+        <strong>Legenda (Tahun: {{ selectedYear }})</strong><br>
         <span class="inline-block w-4 h-4 rounded-sm bg-[#3182ce] mr-2 align-middle" />
-        Wilayah dengan Penilaian IKK<br>
-        <span class="inline-block w-4 h-4 rounded-sm bg-white border border-gray-300 mr-2 align-middle" />
-        Wilayah belum melakukan Penilaian IKK
+        Wilayah dengan Penilaian IKK ({{ countIKKWilayah }})<br>
+        <span class="inline-block w-4 h-4 rounded-sm bg-transparent border-2 border-[#ef4444] mr-2 align-middle" />
+        Wilayah belum/tidak memiliki Penilaian IKK ({{ countNonIKKWilayah }})
       </div>
     </div>
   </div>
@@ -100,10 +100,10 @@ const mapSources = {
     'https://raw.githubusercontent.com/SakifAbdillah/jakartaKecamatanGeoJSON/refs/heads/master/kecamatan.geojson',
 };
 
-const years = ['2021', '2023', '2025'] as const;
+const years = ['2021', '2023', '2024'] as const;
 type YearType = typeof years[number];
 const filter = ref<'provinsi' | 'kabupaten' | 'kementerian'>('provinsi');
-const selectedYear = ref<YearType>('2025');
+const selectedYear = ref<YearType>('2024');
 interface FeatureCollection {
   type: string;
   features: any[];
@@ -166,7 +166,17 @@ const filterLabel = computed(() =>
 );
 
 const countIKK = computed(() =>
-  apiData.value?.data?.filter((item: any) => !!item[`predikat_${selectedYear.value}`]).length ?? 0
+  apiData.value?.data?.filter((item: any) => !!item.predikat).length ?? 0
+);
+
+const totalWilayah = computed(() => geoData.value?.features?.length ?? 0);
+
+const countIKKWilayah = computed(() =>
+  apiData.value?.data?.filter((item: any) => !!item.predikat).length ?? 0
+);
+
+const countNonIKKWilayah = computed(() =>
+  Math.max(totalWilayah.value - countIKKWilayah.value, 0)
 );
 
 const center = computed(() =>
@@ -197,21 +207,36 @@ const highlightCodes = computed(() =>
 
 const styleFeature = (feature: any) => {
   if (!feature) return {};
-  const featureCode = String(feature.properties?.Code ?? feature.properties?.code ?? '');
+
+  const featureCode = String(
+    feature.properties?.Code ??
+    feature.properties?.code ??
+    feature.properties?.kode ??
+    feature.properties?.ID ??
+    ''
+  );
+
   const rawName =
-    feature.properties?.Propinsi ?? feature.properties?.kabupaten ?? feature.properties?.nama ?? '';
+    feature.properties?.Propinsi ??
+    feature.properties?.kabupaten ??
+    feature.properties?.nama ??
+    '';
+
   const name = normalizeName(rawName);
+
   const isHighlight =
     filter.value === 'kabupaten'
       ? highlightCodes.value.includes(featureCode)
       : highlightNames.value.includes(name);
+
   return {
-    fillColor: isHighlight ? '#3182ce' : '#fff',
-    weight: 1,
+    fillColor: isHighlight ? '#3182ce' : '#ef4444',
+    weight: isHighlight ? 1.6 : 1.8,
     opacity: 1,
-    color: isHighlight ? 'white' : '#ccc',
-    dashArray: '3',
-    fillOpacity: isHighlight ? 0.7 : 0.5,
+    color: isHighlight ? '#1d4ed8' : '#ef4444',
+    dashArray: '0',
+    // non-highlight: merah tipis biar terlihat dan cocok dengan legend
+    fillOpacity: isHighlight ? 0.55 : 0.12,
   };
 };
 

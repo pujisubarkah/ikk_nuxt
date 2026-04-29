@@ -8,7 +8,7 @@
     <div class="mb-6 flex items-center">
       <label class="font-semibold mr-2 text-gray-700">Pilih Koordinator Nasional:</label>
       <select
-        class="border border-gray-300 rounded-md px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 min-w-[250px]"
+        class="border border-gray-300 rounded-md px-3 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 min-w-62.5"
         v-model="selectedKoordinator"
       >
         <option v-for="kn in koordinatorList" :key="kn.id" :value="kn.id">
